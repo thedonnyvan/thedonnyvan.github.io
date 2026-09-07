@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12141a;
+    --surface:#1b1e27;
+    --surface-2:#22262f;
+    --line:#2c303b;
+    --text:#edeef2;
+    --muted:#8b8fa3;
+    --amber:#e8b94a;
+    --teal:#5ec8c0;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+  }
+  h1,h2,h3,.display{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;}
+  p{color:var(--muted);}
+  ::selection{background:var(--amber);color:#12141a;}
+
+  /* ===== Top scrubber nav ===== */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(18,20,26,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .top-row{
+    max-width:1120px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 24px 0;
+  }
+  .brand{font-size:18px;font-weight:600;}
+  .brand span{color:var(--amber);}
+  .search-wrap{position:relative;}
+  .search-wrap input{
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:7px 12px;
+    border-radius:var(--radius);
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    width:180px;
+    transition:width .2s ease;
+  }
+  .search-wrap input:focus{outline:none;border-color:var(--amber);width:230px;}
+  #searchResults{
+    position:absolute;right:0;top:38px;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    width:280px;max-height:320px;overflow-y:auto;
+    border-radius:var(--radius);
+    display:none;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  }
+  #searchResults.open{display:block;}
+  #searchResults div.result{
+    padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;
+  }
+  #searchResults div.result:hover{background:var(--surface);}
+  #searchResults div.result small{display:block;color:var(--muted);margin-top:2px;}
+  #searchResults .none{padding:12px;color:var(--muted);font-size:13px;}
+
+  nav.tabs{
+    max-width:1120px;margin:0 auto;
+    display:flex;gap:2px;overflow-x:auto;
+    padding:18px 24px 0;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  nav.tabs button{
+    background:none;border:none;color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:14px;font-weight:500;
+    padding:0 14px 14px;cursor:pointer;white-space:nowrap;
+    border-bottom:2px solid transparent;
+    transition:color .15s ease;
+  }
+  nav.tabs button:hover{color:var(--text);}
+  nav.tabs button.active{color:var(--text);border-bottom-color:var(--amber);}
+
+  main{max-width:1120px;margin:0 auto;padding:48px 24px 96px;}
+  .panel{display:none;}
+  .panel.active{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ===== Home ===== */
+  .hero h1{font-size:42px;line-height:1.15;max-width:640px;}
+  .hero p.lede{font-size:17px;max-width:560px;margin-top:16px;}
+  .now-bar{
+    margin-top:32px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:var(--radius);
+    padding:16px 20px;
+    display:flex;gap:14px;align-items:flex-start;
+  }
+  .now-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:6px;flex-shrink:0;
+    box-shadow:0 0 0 4px rgba(94,200,192,0.15);}
+  .now-bar .label{font-size:12px;color:var(--teal);text-transform:lowercase;}
+  .now-bar .content{font-size:14px;margin-top:2px;}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px;}
+  @media(max-width:680px){.about-grid{grid-template-columns:1fr;}}
+  .about-grid h3{font-size:15px;color:var(--amber);margin-bottom:8px;}
+  .about-grid p{font-size:14px;}
+
+  /* ===== Cards / grids ===== */
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;}
+  .section-head h2{font-size:24px;}
+  .section-head p{font-size:13px;margin:0;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    transition:border-color .15s ease;
+  }
+  .card:hover{border-color:#3a3f4c;}
+  .card .embed{aspect-ratio:16/9;background:#0d0e12;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;}
+  .card .embed.audio{aspect-ratio:auto;height:96px;}
+  .card-body{padding:14px 16px 16px;}
+  .card-body h3{font-size:15px;font-weight:600;}
+  .card-body p{font-size:13px;margin:6px 0 10px;}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);
+    border:1px solid var(--line);padding:2px 7px;border-radius:20px;
+  }
+
+  /* ===== Lists (blog/movies/books) ===== */
+  .list-row{
+    display:flex;justify-content:space-between;gap:20px;
+    padding:20px 0;border-bottom:1px solid var(--line);
+  }
+  .list-row:first-child{padding-top:0;}
+  .list-row .meta{font-size:12px;color:var(--amber);margin-bottom:4px;}
+  .list-row h3{font-size:16px;}
+  .list-row p{font-size:14px;margin-top:6px;max-width:600px;}
+  .rating{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--amber);white-space:nowrap;}
+
+  /* ===== Review type tag + filters ===== */
+  .type-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--teal);
+    border:1px solid var(--line);padding:2px 8px;border-radius:20px;
+    display:inline-block;margin-bottom:8px;
+  }
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+  .filter-pill{
+    background:none;border:1px solid var(--line);color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:13px;padding:6px 14px;
+    border-radius:20px;cursor:pointer;transition:all .15s ease;
+  }
+  .filter-pill:hover{color:var(--text);}
+  .filter-pill.active{border-color:var(--amber);color:var(--amber);}
+  .list-row.hidden{display:none;}
+  .ask-btn{
+    margin-top:10px;background:none;border:1px solid var(--line);color:var(--text);
+    font-size:12px;padding:6px 12px;border-radius:20px;cursor:pointer;
+  }
+  .ask-btn:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* ===== Projects ===== */
+  .proj-card{padding:18px 18px 20px;}
+  .proj-card .top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .proj-card a.link{font-size:12px;color:var(--teal);text-decoration:none;}
+
+  /* ===== Resume ===== */
+  .resume-box{
+    border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);
+    padding:32px;text-align:center;
+  }
+  .btn{
+    display:inline-block;background:var(--amber);color:#12141a;font-weight:600;
+    padding:10px 20px;border-radius:var(--radius);text-decoration:none;font-size:14px;
+    margin-top:16px;
+  }
+
+  /* ===== Contact ===== */
+  form.contact{max-width:480px;}
+  form.contact label{display:block;font-size:12px;color:var(--muted);margin:16px 0 6px;}
+  form.contact input, form.contact textarea{
+    width:100%;background:var(--surface);border:1px solid var(--line);color:var(--text);
+    padding:10px 12px;border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:14px;
+  }
+  form.contact input:focus, form.contact textarea:focus{outline:none;border-color:var(--amber);}
+  form.contact button{
+    margin-top:22px;background:var(--amber);color:#12141a;border:none;font-weight:600;
+    padding:11px 22px;border-radius:var(--radius);cursor:pointer;font-size:14px;
+  }
+  .contact-row{display:flex;gap:24px;margin-top:40px;flex-wrap:wrap;}
+  .contact-item{font-size:13px;color:var(--muted);}
+  .contact-item span{display:block;color:var(--text);margin-top:2px;}
+  #formNote{font-size:12px;color:var(--muted);margin-top:10px;display:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-row">
+    <div class="brand">Donavan<span>Drouin</span></div>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search everything...">
+      <div id="searchResults"></div>
+    </div>
+  </div>
+  <nav class="tabs" id="tabNav">
+    <button data-tab="home" class="active">Home</button>
+    <button data-tab="projects">Projects</button>
+    <button data-tab="music">Music</button>
+    <button data-tab="edits">Anime Edits</button>
+    <button data-tab="animations">Animations</button>
+    <button data-tab="blog">Blog</button>
+    <button data-tab="reviews">Reviews</button>
+    <button data-tab="resume">Resume</button>
+    <button data-tab="contact">Contact</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section class="panel active" id="home">
+    <div class="hero">
+      <h1>Hi, I'm Donavan Drouin — I build, edit, and write about the things I love.</h1>
+      <p class="lede">Code, music, anime edits, animation, and a running log of what I'm watching and reading. This is where it all lives.</p>
+      <div class="now-bar">
+        <div class="now-dot"></div>
+        <div>
+          <div class="label">now</div>
+          <div class="content">Editing a new AMV to a synthwave track · debugging a side project · about halfway through a paperback.</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-grid">
+      <div>
+        <h3>What I make</h3>
+        <p>A mix of code projects, music, anime edits, and short animations — some for fun, some for practice, all posted here as I finish them.</p>
+      </div>
+      <div>
+        <h3>What I'm into</h3>
+        <p>I keep a running log of movies and books with honest, short reviews. If something on there catches your eye, message me — I'm always happy to talk about it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="panel" id="projects">
+    <div class="section-head">
+      <h2>Projects</h2>
+      <p>Code + write-ups</p>
+    </div>
+    <div class="grid">
+      <div class="card proj-card" data-search="project one code repository">
+        <div class="top">
+          <h3>Project Name One</h3>
+        </div>
+        <p>Short description of the problem, your approach, and what you learned building it.</p>
+        <div class="tags"><span class="tag">python</span><span class="tag">api</span></div>
+        <div style="margin-top:12px;"><a class="link" href="#">View repository →</a></div>
+      </div>
+      <div class="card proj-card" data-search="project two code repository">
+        <div class="top">
+          <h3>Project Name Two</h3>
+        </div>
+        <p>Short description of the problem, your approach, and what you learned building it.</p>
+        <div class="tags"><span class="tag">javascript</span><span class="tag">react</span></div>
+        <div style="margin-top:12px;"><a class="link" href="#">View repository →</a></div>
+      </div>
+      <div class="card proj-card" data-search="project three code repository">
+        <div class="top">
+          <h3>Project Name Three</h3>
+        </div>
+        <p>Short description of the problem, your approach, and what you learned building it.</p>
+        <div class="tags"><span class="tag">tool</span></div>
+        <div style="margin-top:12px;"><a class="link" href="#">View repository →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MUSIC -->
+  <section class="panel" id="music">
+    <div class="section-head">
+      <h2>Music</h2>
+      <p>Embedded tracks</p>
+    </div>
+    <div class="grid">
+      <div class="card" data-search="music track one">
+        <div class="embed audio">SoundCloud / audio embed here</div>
+        <div class="card-body">
+          <h3>Track Title One</h3>
+          <p>One line about the track — genre, mood, or what it was made for.</p>
+        </div>
+      </div>
+      <div class="card" data-search="music track two">
+        <div class="embed audio">SoundCloud / audio embed here</div>
+        <div class="card-body">
+          <h3>Track Title Two</h3>
+          <p>One line about the track — genre, mood, or what it was made for.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANIME EDITS -->
+  <section class="panel" id="edits">
+    <div class="section-head">
+      <h2>Anime Edits</h2>
+      <p>Embedded video</p>
+    </div>
+    <div class="grid">
+      <div class="card" data-search="anime edit one amv">
+        <div class="embed">YouTube embed here</div>
+        <div class="card-body">
+          <h3>Edit Title One</h3>
+          <p>Series, song used, and edit style.</p>
+        </div>
+      </div>
+      <div class="card" data-search="anime edit two amv">
+        <div class="embed">YouTube embed here</div>
+        <div class="card-body">
+          <h3>Edit Title Two</h3>
+          <p>Series, song used, and edit style.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANIMATIONS -->
+  <section class="panel" id="animations">
+    <div class="section-head">
+      <h2>Animations</h2>
+      <p>Embedded video</p>
+    </div>
+    <div class="grid">
+      <div class="card" data-search="animation one short">
+        <div class="embed">Vimeo / YouTube embed here</div>
+        <div class="card-body">
+          <h3>Animation Title One</h3>
+          <p>Tools used and a line about the concept.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section class="panel" id="blog">
+    <div class="section-head">
+      <h2>Blog</h2>
+      <p>Process notes + updates</p>
+    </div>
+    <div class="list-view">
+      <div class="list-row" data-search="blog post one process">
+        <div>
+          <div class="meta mono">March 2026</div>
+          <h3>Post Title One</h3>
+          <p>A short excerpt of what the post covers.</p>
+        </div>
+      </div>
+      <div class="list-row" data-search="blog post two process">
+        <div>
+          <div class="meta mono">February 2026</div>
+          <h3>Post Title Two</h3>
+          <p>A short excerpt of what the post covers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS (movies, books, anime, shows) -->
+  <section class="panel" id="reviews">
+    <div class="section-head">
+      <h2>Reviews</h2>
+      <p>Watched, read, rated</p>
+    </div>
+    <div class="filter-row" id="reviewFilters">
+      <button class="filter-pill active" data-type="all">All</button>
+      <button class="filter-pill" data-type="movie">Movies</button>
+      <button class="filter-pill" data-type="show">Shows</button>
+      <button class="filter-pill" data-type="anime">Anime</button>
+      <button class="filter-pill" data-type="book">Books</button>
+    </div>
+    <div class="list-view">
+      <div class="list-row" data-type="movie" data-search="movie title one review">
+        <div>
+          <span class="type-tag mono">movie</span>
+          <h3>Movie Title One</h3>
+          <p>A short, honest review — what worked, what didn't.</p>
+        </div>
+        <div class="rating">8/10</div>
+      </div>
+      <div class="list-row" data-type="movie" data-search="movie title two review">
+        <div>
+          <span class="type-tag mono">movie</span>
+          <h3>Movie Title Two</h3>
+          <p>A short, honest review — what worked, what didn't.</p>
+        </div>
+        <div class="rating">6/10</div>
+      </div>
+      <div class="list-row" data-type="show" data-search="show title one review series">
+        <div>
+          <span class="type-tag mono">show</span>
+          <h3>Show Title One</h3>
+          <p>A short, honest review — what worked, what didn't, season by season if it matters.</p>
+        </div>
+        <div class="rating">9/10</div>
+      </div>
+      <div class="list-row" data-type="anime" data-search="anime title one review series">
+        <div>
+          <span class="type-tag mono">anime</span>
+          <h3>Anime Title One</h3>
+          <p>A short review — story, animation, whether it stuck the landing.</p>
+        </div>
+        <div class="rating">10/10</div>
+      </div>
+      <div class="list-row" data-type="anime" data-search="anime title two review series">
+        <div>
+          <span class="type-tag mono">anime</span>
+          <h3>Anime Title Two</h3>
+          <p>A short review — story, animation, whether it stuck the landing.</p>
+        </div>
+        <div class="rating">7/10</div>
+      </div>
+      <div class="list-row" data-type="book" data-search="book title one review">
+        <div>
+          <span class="type-tag mono">book</span>
+          <h3>Book Title One</h3>
+          <p>A short review of the book.</p>
+          <button class="ask-btn" onclick="askAbout('Book Title One')">Ask me about this book</button>
+        </div>
+        <div class="rating">9/10</div>
+      </div>
+      <div class="list-row" data-type="book" data-search="book title two review">
+        <div>
+          <span class="type-tag mono">book</span>
+          <h3>Book Title Two</h3>
+          <p>A short review of the book.</p>
+          <button class="ask-btn" onclick="askAbout('Book Title Two')">Ask me about this book</button>
+        </div>
+        <div class="rating">7/10</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section class="panel" id="resume">
+    <div class="section-head">
+      <h2>Resume</h2>
+      <p></p>
+    </div>
+    <div class="resume-box">
+      <p>View or download my resume below.</p>
+      <a class="btn" href="resume.pdf" target="_blank">Download Resume (PDF)</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="panel" id="contact">
+    <div class="section-head">
+      <h2>Contact</h2>
+      <p></p>
+    </div>
+    <!-- Using Formspree: replace YOUR_FORM_ID with your own form ID from formspree.io -->
+    <form class="contact" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+      <button type="submit">Send message</button>
+      <div id="formNote">Thanks — your message has been sent.</div>
+    </form>
+    <div class="contact-row">
+      <div class="contact-item">Prefer email?<span>you@example.com</span></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ---- Tab switching ----
+  const tabButtons = document.querySelectorAll('nav.tabs button');
+  const panels = document.querySelectorAll('.panel');
+  function showTab(id){
+    tabButtons.forEach(b=>b.classList.toggle('active', b.dataset.tab===id));
+    panels.forEach(p=>p.classList.toggle('active', p.id===id));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  tabButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=> showTab(btn.dataset.tab));
+  });
+
+  // ---- Reviews filter ----
+  const filterPills = document.querySelectorAll('#reviewFilters .filter-pill');
+  const reviewRows = document.querySelectorAll('#reviews .list-row');
+  filterPills.forEach(pill=>{
+    pill.addEventListener('click', ()=>{
+      filterPills.forEach(p=>p.classList.remove('active'));
+      pill.classList.add('active');
+      const type = pill.dataset.type;
+      reviewRows.forEach(row=>{
+        row.classList.toggle('hidden', type !== 'all' && row.dataset.type !== type);
+      });
+    });
+  });
+
+  function askAbout(title){
+    showTab('contact');
+    document.getElementById('message').value = "Hi — I'd love to hear more about \"" + title + "\".";
+  }
+
+  // ---- Search across all tabs ----
+  const searchInput = document.getElementById('searchInput');
+  const resultsBox = document.getElementById('searchResults');
+  const searchableItems = document.querySelectorAll('[data-search]');
+
+  searchInput.addEventListener('input', ()=>{
+    const q = searchInput.value.trim().toLowerCase();
+    if(q.length < 2){ resultsBox.classList.remove('open'); return; }
+    let matches = [];
+    searchableItems.forEach(el=>{
+      const haystack = (el.dataset.search + ' ' + el.innerText).toLowerCase();
+      if(haystack.includes(q)){
+        const panelId = el.closest('.panel').id;
+        const title = el.querySelector('h3') ? el.querySelector('h3').innerText : el.dataset.search;
+        matches.push({panelId, title, el});
+      }
+    });
+    resultsBox.innerHTML = '';
+    if(matches.length === 0){
+      resultsBox.innerHTML = '<div class="none">No matches</div>';
+    } else {
+      matches.slice(0,8).forEach(m=>{
+        const div = document.createElement('div');
+        div.className = 'result';
+        div.innerHTML = m.title + '<small>' + m.panelId + '</small>';
+        div.addEventListener('click', ()=>{
+          showTab(m.panelId);
+          resultsBox.classList.remove('open');
+          searchInput.value = '';
+          m.el.style.borderColor = '#e8b94a';
+          setTimeout(()=> m.el.style.borderColor = '', 1600);
+        });
+        resultsBox.appendChild(div);
+      });
+    }
+    resultsBox.classList.add('open');
+  });
+
+  document.addEventListener('click', (e)=>{
+    if(!e.target.closest('.search-wrap')) resultsBox.classList.remove('open');
+  });
+
+  // ---- Contact form (Formspree, AJAX so it doesn't leave the page) ----
+  const form = document.getElementById('contactForm');
+  const note = document.getElementById('formNote');
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const data = new FormData(form);
+    try{
+      const res = await fetch(form.action, {
+        method:'POST',
+        body:data,
+        headers:{'Accept':'application/json'}
+      });
+      if(res.ok){
+        note.textContent = "Thanks — your message has been sent.";
+        note.style.display = 'block';
+        form.reset();
+      } else {
+        note.textContent = "Something went wrong — try again, or email me directly.";
+        note.style.display = 'block';
+      }
+    } catch(err){
+      note.textContent = "Set up your Formspree form ID in the HTML to enable this form.";
+      note.style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+</html>
