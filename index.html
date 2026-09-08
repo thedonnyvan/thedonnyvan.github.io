@@ -187,6 +187,17 @@
     font-size:12px;padding:6px 12px;border-radius:20px;cursor:pointer;
   }
   .ask-btn:hover{border-color:var(--teal);color:var(--teal);}
+  .reveal-btn{
+    margin-top:12px;background:none;border:1px solid var(--line);color:var(--amber);
+    font-size:13px;font-weight:500;padding:7px 14px;border-radius:20px;cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .reveal-btn:hover{border-color:var(--amber);}
+  .hidden-review{
+    display:none;margin-top:14px;padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+  .hidden-review.open{display:block;}
 
   /* ===== Projects ===== */
   .proj-card{padding:18px 18px 20px;}
@@ -380,7 +391,12 @@
           <p style="color:var(--muted);font-size:12px;margin-top:-4px;margin-bottom:10px;">by Mary Downing Hahn</p>
           <p><strong style="color:var(--text);">Summary:</strong> Thirteen-year-old Ali is looking forward to a quiet summer with her aunt and young cousin at the family's old lake house in Maine. But an unsettling local girl keeps inserting herself into their vacation, and Ali starts to sense there's something she's not being told about her own family's past at that lake.</p>
           <p style="margin-top:10px;"><strong style="color:var(--text);">About the author:</strong> Mary Downing Hahn is an American author and former children's librarian best known for ghost stories written for young readers, including <em>Wait Till Helen Comes</em> and <em>Took</em>. Her books have won more than fifty state children's choice awards over her career.</p>
-          <p style="margin-top:10px;font-style:italic;">Full review coming soon.</p>
+          <button class="reveal-btn" onclick="toggleReview(this)">Read my review ▾</button>
+          <div class="hidden-review">
+            <p>Deep and Dark and Dangerous is a well-written novel, but it falls victim to predictability and an unsatisfying ending. The moment Sissy shows up, it's obvious she must be the girl from the torn photo — the mystery never really gets a chance to breathe. When Ali finally puts the pieces together, it feels rushed, like it's all pulled from the previous chapter at once. The detail with the flower petals thrown into the lake "proving" Sissy is Teresa felt especially random. The story just isn't mysterious enough, and it doesn't ask the reader to think very hard to get there.</p>
+            <p style="margin-top:10px;">The ending doesn't land, either. Dulcie tells everyone the truth about what happened to Sissy/Teresa, but it doesn't feel like anything is really accomplished by that point. I think what I wanted was a scarier story — something where Teresa's ghost tries to pull one of the girls down to the bottom of the lake so they can be ghosts together forever. Instead, Teresa just wanted justice. She gets it in the end, but I wasn't satisfied, because I wanted it to be scarier.</p>
+            <p style="margin-top:10px;">That said, I think Mary Downing Hahn nailed exactly what she set out to do: tell a ghost story. Sissy is constantly described as having almost ghost-like blonde hair, which I really liked, and there's a recurring focus on how thin the characters are that adds to that eerie, bones-under-the-skin feeling. It's a genuinely good book — I'd just recommend it for a younger audience than myself.</p>
+          </div>
         </div>
         <div class="rating">3/5 ★</div>
       </div>
@@ -411,6 +427,13 @@
 </main>
 
 <script>
+  // ---- Click-to-reveal review ----
+  function toggleReview(btn){
+    const content = btn.nextElementSibling;
+    const isOpen = content.classList.toggle('open');
+    btn.textContent = isOpen ? 'Hide my review ▴' : 'Read my review ▾';
+  }
+
   // ---- Book cover fallback (tries alternate edition, then hides gracefully) ----
   const cover = document.getElementById('ddd-cover');
   if(cover){
