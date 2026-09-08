@@ -118,7 +118,10 @@
   .now-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:6px;flex-shrink:0;
     box-shadow:0 0 0 4px rgba(94,200,192,0.15);}
   .now-bar .label{font-size:12px;color:var(--teal);text-transform:lowercase;}
-  .now-bar .content{font-size:14px;margin-top:2px;}
+  .now-list{font-size:14px;margin-top:2px;}
+  .now-list div{margin-top:6px;color:var(--text);}
+  .now-list div:first-child{margin-top:0;}
+  .now-list strong{color:var(--muted);font-weight:500;}
   .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px;}
   @media(max-width:680px){.about-grid{grid-template-columns:1fr;}}
   .about-grid h3{font-size:15px;color:var(--amber);margin-bottom:8px;}
@@ -212,13 +215,22 @@
   .contact-item{font-size:13px;color:var(--muted);}
   .contact-item span{display:block;color:var(--text);margin-top:2px;}
   #formNote{font-size:12px;color:var(--muted);margin-top:10px;display:none;}
+
+  /* ===== Empty states ===== */
+  .empty-state{
+    border:1px dashed var(--line);border-radius:var(--radius);
+    padding:40px 24px;text-align:center;
+  }
+  .empty-state p{font-size:14px;max-width:420px;margin:0 auto;}
+  .empty-state a{color:var(--teal);text-decoration:none;font-size:13px;display:inline-block;margin-top:14px;border:1px solid var(--line);padding:8px 16px;border-radius:20px;}
+  .empty-state a:hover{border-color:var(--teal);}
 </style>
 </head>
 <body>
 
 <header>
   <div class="top-row">
-    <div class="brand">Donavan<span>Drouin</span></div>
+    <div class="brand">Donavan <span>Drouin</span></div>
     <div class="search-wrap">
       <input type="text" id="searchInput" placeholder="Search everything...">
       <div id="searchResults"></div>
@@ -246,9 +258,13 @@
       <p class="lede">Code, music, anime edits, animation, and a running log of what I'm watching and reading. This is where it all lives.</p>
       <div class="now-bar">
         <div class="now-dot"></div>
-        <div>
+        <div style="width:100%;">
           <div class="label">now</div>
-          <div class="content">Editing a new AMV to a synthwave track · debugging a side project · about halfway through a paperback.</div>
+          <div class="now-list">
+            <div><strong>Watching:</strong> Peacemaker Season 2</div>
+            <div><strong>Reading:</strong> Such Lovely Skin by Tatiana Schlote-Bonne</div>
+            <div><strong>Building:</strong> an AI voice assistant</div>
+          </div>
         </div>
       </div>
     </div>
@@ -271,29 +287,29 @@
       <p>Code + write-ups</p>
     </div>
     <div class="grid">
-      <div class="card proj-card" data-search="project one code repository">
+      <div class="card proj-card" data-search="recipefinder code repository">
         <div class="top">
-          <h3>Project Name One</h3>
+          <h3>RecipeFinder</h3>
         </div>
-        <p>Short description of the problem, your approach, and what you learned building it.</p>
-        <div class="tags"><span class="tag">python</span><span class="tag">api</span></div>
-        <div style="margin-top:12px;"><a class="link" href="#">View repository →</a></div>
+        <p>Add a short line here on what it does and what you used to build it.</p>
+        <div class="tags"><span class="tag">edit me</span></div>
+        <div style="margin-top:12px;"><a class="link" href="https://github.com/thedonnyvan/RecipeFinder" target="_blank">View repository →</a></div>
       </div>
-      <div class="card proj-card" data-search="project two code repository">
+      <div class="card proj-card" data-search="weatherapp code repository">
         <div class="top">
-          <h3>Project Name Two</h3>
+          <h3>WeatherApp</h3>
         </div>
-        <p>Short description of the problem, your approach, and what you learned building it.</p>
-        <div class="tags"><span class="tag">javascript</span><span class="tag">react</span></div>
-        <div style="margin-top:12px;"><a class="link" href="#">View repository →</a></div>
+        <p>Add a short line here on what it does and what you used to build it.</p>
+        <div class="tags"><span class="tag">edit me</span></div>
+        <div style="margin-top:12px;"><a class="link" href="https://github.com/thedonnyvan/WeatherApp" target="_blank">View repository →</a></div>
       </div>
-      <div class="card proj-card" data-search="project three code repository">
+      <div class="card proj-card" data-search="shotguns versus aliens code repository">
         <div class="top">
-          <h3>Project Name Three</h3>
+          <h3>Shotguns-versus-aliens</h3>
         </div>
-        <p>Short description of the problem, your approach, and what you learned building it.</p>
-        <div class="tags"><span class="tag">tool</span></div>
-        <div style="margin-top:12px;"><a class="link" href="#">View repository →</a></div>
+        <p>Add a short line here on what it does and what you used to build it.</p>
+        <div class="tags"><span class="tag">edit me</span></div>
+        <div style="margin-top:12px;"><a class="link" href="https://github.com/thedonnyvan/Shotguns-versus-aliens" target="_blank">View repository →</a></div>
       </div>
     </div>
   </section>
@@ -304,21 +320,9 @@
       <h2>Music</h2>
       <p>Embedded tracks</p>
     </div>
-    <div class="grid">
-      <div class="card" data-search="music track one">
-        <div class="embed audio">SoundCloud / audio embed here</div>
-        <div class="card-body">
-          <h3>Track Title One</h3>
-          <p>One line about the track — genre, mood, or what it was made for.</p>
-        </div>
-      </div>
-      <div class="card" data-search="music track two">
-        <div class="embed audio">SoundCloud / audio embed here</div>
-        <div class="card-body">
-          <h3>Track Title Two</h3>
-          <p>One line about the track — genre, mood, or what it was made for.</p>
-        </div>
-      </div>
+    <div class="empty-state">
+      <p>No tracks posted yet. Music will be embedded here from my YouTube channel, Junebug Productions.</p>
+      <a href="https://www.youtube.com/@JunebugProductions" target="_blank">Visit Junebug Productions →</a>
     </div>
   </section>
 
@@ -328,21 +332,9 @@
       <h2>Anime Edits</h2>
       <p>Embedded video</p>
     </div>
-    <div class="grid">
-      <div class="card" data-search="anime edit one amv">
-        <div class="embed">YouTube embed here</div>
-        <div class="card-body">
-          <h3>Edit Title One</h3>
-          <p>Series, song used, and edit style.</p>
-        </div>
-      </div>
-      <div class="card" data-search="anime edit two amv">
-        <div class="embed">YouTube embed here</div>
-        <div class="card-body">
-          <h3>Edit Title Two</h3>
-          <p>Series, song used, and edit style.</p>
-        </div>
-      </div>
+    <div class="empty-state">
+      <p>No edits posted yet. These will be embedded here from my YouTube channel, Junebug Productions.</p>
+      <a href="https://www.youtube.com/@JunebugProductions" target="_blank">Visit Junebug Productions →</a>
     </div>
   </section>
 
@@ -352,14 +344,9 @@
       <h2>Animations</h2>
       <p>Embedded video</p>
     </div>
-    <div class="grid">
-      <div class="card" data-search="animation one short">
-        <div class="embed">Vimeo / YouTube embed here</div>
-        <div class="card-body">
-          <h3>Animation Title One</h3>
-          <p>Tools used and a line about the concept.</p>
-        </div>
-      </div>
+    <div class="empty-state">
+      <p>No animations posted yet. These will be embedded here from my YouTube channel, Junebug Productions.</p>
+      <a href="https://www.youtube.com/@JunebugProductions" target="_blank">Visit Junebug Productions →</a>
     </div>
   </section>
 
@@ -369,21 +356,8 @@
       <h2>Blog</h2>
       <p>Process notes + updates</p>
     </div>
-    <div class="list-view">
-      <div class="list-row" data-search="blog post one process">
-        <div>
-          <div class="meta mono">March 2026</div>
-          <h3>Post Title One</h3>
-          <p>A short excerpt of what the post covers.</p>
-        </div>
-      </div>
-      <div class="list-row" data-search="blog post two process">
-        <div>
-          <div class="meta mono">February 2026</div>
-          <h3>Post Title Two</h3>
-          <p>A short excerpt of what the post covers.</p>
-        </div>
-      </div>
+    <div class="empty-state">
+      <p>No posts yet. This is where I'll write about process, projects, and updates.</p>
     </div>
   </section>
 
@@ -400,65 +374,9 @@
       <button class="filter-pill" data-type="anime">Anime</button>
       <button class="filter-pill" data-type="book">Books</button>
     </div>
-    <div class="list-view">
-      <div class="list-row" data-type="movie" data-search="movie title one review">
-        <div>
-          <span class="type-tag mono">movie</span>
-          <h3>Movie Title One</h3>
-          <p>A short, honest review — what worked, what didn't.</p>
-        </div>
-        <div class="rating">8/10</div>
-      </div>
-      <div class="list-row" data-type="movie" data-search="movie title two review">
-        <div>
-          <span class="type-tag mono">movie</span>
-          <h3>Movie Title Two</h3>
-          <p>A short, honest review — what worked, what didn't.</p>
-        </div>
-        <div class="rating">6/10</div>
-      </div>
-      <div class="list-row" data-type="show" data-search="show title one review series">
-        <div>
-          <span class="type-tag mono">show</span>
-          <h3>Show Title One</h3>
-          <p>A short, honest review — what worked, what didn't, season by season if it matters.</p>
-        </div>
-        <div class="rating">9/10</div>
-      </div>
-      <div class="list-row" data-type="anime" data-search="anime title one review series">
-        <div>
-          <span class="type-tag mono">anime</span>
-          <h3>Anime Title One</h3>
-          <p>A short review — story, animation, whether it stuck the landing.</p>
-        </div>
-        <div class="rating">10/10</div>
-      </div>
-      <div class="list-row" data-type="anime" data-search="anime title two review series">
-        <div>
-          <span class="type-tag mono">anime</span>
-          <h3>Anime Title Two</h3>
-          <p>A short review — story, animation, whether it stuck the landing.</p>
-        </div>
-        <div class="rating">7/10</div>
-      </div>
-      <div class="list-row" data-type="book" data-search="book title one review">
-        <div>
-          <span class="type-tag mono">book</span>
-          <h3>Book Title One</h3>
-          <p>A short review of the book.</p>
-          <button class="ask-btn" onclick="askAbout('Book Title One')">Ask me about this book</button>
-        </div>
-        <div class="rating">9/10</div>
-      </div>
-      <div class="list-row" data-type="book" data-search="book title two review">
-        <div>
-          <span class="type-tag mono">book</span>
-          <h3>Book Title Two</h3>
-          <p>A short review of the book.</p>
-          <button class="ask-btn" onclick="askAbout('Book Title Two')">Ask me about this book</button>
-        </div>
-        <div class="rating">7/10</div>
-      </div>
+    <div class="list-view" id="reviewList"></div>
+    <div class="empty-state" id="reviewsEmpty">
+      <p>No reviews posted yet — first one coming soon.</p>
     </div>
   </section>
 
@@ -468,8 +386,11 @@
       <h2>Resume</h2>
       <p></p>
     </div>
+    <p style="font-size:15px;color:var(--text);max-width:640px;line-height:1.6;margin-bottom:28px;">
+      I am a computer science graduate who has a strong interest in leveraging data to drive operational efficiency. I enjoy working with Python, SQL, and other data tools to transform complex information into actionable insights that help guide a company's decisions to enhance product performance and optimize operations.
+    </p>
     <div class="resume-box">
-      <p>View or download my resume below.</p>
+      <p>View or download my full resume below.</p>
       <a class="btn" href="resume.pdf" target="_blank">Download Resume (PDF)</a>
     </div>
   </section>
