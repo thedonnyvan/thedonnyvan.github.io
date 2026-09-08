@@ -165,6 +165,19 @@
     width:90px;height:auto;flex-shrink:0;
     border-radius:2px;box-shadow:0 4px 12px rgba(0,0,0,0.4);
     align-self:flex-start;
+    transition:transform .15s ease;
+  }
+  .book-cover:hover{transform:scale(1.04);}
+  .cover-zoom-overlay{
+    display:none;position:fixed;inset:0;z-index:200;
+    background:rgba(10,11,14,0.88);backdrop-filter:blur(4px);
+    align-items:center;justify-content:center;
+    cursor:zoom-out;padding:32px;
+  }
+  .cover-zoom-overlay.open{display:flex;}
+  .cover-zoom-overlay img{
+    max-width:min(90vw,480px);max-height:85vh;width:auto;height:auto;
+    border-radius:4px;box-shadow:0 12px 48px rgba(0,0,0,0.6);
   }
 
   /* ===== Review type tag + filters ===== */
@@ -384,7 +397,10 @@
     </div>
     <div class="list-view" id="reviewList">
       <div class="list-row book-row" data-type="book" data-search="deep and dark and dangerous mary downing hahn book review">
-        <img class="book-cover" id="ddd-cover" src="https://covers.openlibrary.org/b/isbn/9780547076454-L.jpg" alt="Deep and Dark and Dangerous book cover" data-fallback="https://covers.openlibrary.org/b/isbn/9780618665457-L.jpg">
+        <img class="book-cover" id="ddd-cover" src="https://covers.openlibrary.org/b/isbn/9780547076454-L.jpg" alt="Deep and Dark and Dangerous book cover" data-fallback="https://covers.openlibrary.org/b/isbn/9780618665457-L.jpg" onclick="openCoverZoom(this.src, this.alt)" style="cursor:zoom-in;">
+        <div id="coverZoomOverlay" class="cover-zoom-overlay" onclick="closeCoverZoom()">
+          <img id="coverZoomImg" src="" alt="">
+        </div>
         <div>
           <span class="type-tag mono">book</span>
           <h3>Deep and Dark and Dangerous</h3>
@@ -427,6 +443,21 @@
 </main>
 
 <script>
+  // ---- Book cover zoom ----
+  function openCoverZoom(src, alt){
+    const overlay = document.getElementById('coverZoomOverlay');
+    const img = document.getElementById('coverZoomImg');
+    img.src = src;
+    img.alt = alt;
+    overlay.classList.add('open');
+  }
+  function closeCoverZoom(){
+    document.getElementById('coverZoomOverlay').classList.remove('open');
+  }
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeCoverZoom();
+  });
+
   // ---- Click-to-reveal review ----
   function toggleReview(btn){
     const content = btn.nextElementSibling;
