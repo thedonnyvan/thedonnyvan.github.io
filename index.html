@@ -161,6 +161,11 @@
   .list-row h3{font-size:16px;}
   .list-row p{font-size:14px;margin-top:6px;max-width:600px;}
   .rating{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--amber);white-space:nowrap;}
+  .book-cover{
+    width:90px;height:auto;flex-shrink:0;
+    border-radius:2px;box-shadow:0 4px 12px rgba(0,0,0,0.4);
+    align-self:flex-start;
+  }
 
   /* ===== Review type tag + filters ===== */
   .type-tag{
@@ -209,23 +214,6 @@
     margin-top:16px;
   }
 
-  /* ===== Contact ===== */
-  form.contact{max-width:480px;}
-  form.contact label{display:block;font-size:12px;color:var(--muted);margin:16px 0 6px;}
-  form.contact input, form.contact textarea{
-    width:100%;background:var(--surface);border:1px solid var(--line);color:var(--text);
-    padding:10px 12px;border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:14px;
-  }
-  form.contact input:focus, form.contact textarea:focus{outline:none;border-color:var(--amber);}
-  form.contact button{
-    margin-top:22px;background:var(--amber);color:#12141a;border:none;font-weight:600;
-    padding:11px 22px;border-radius:var(--radius);cursor:pointer;font-size:14px;
-  }
-  .contact-row{display:flex;gap:24px;margin-top:40px;flex-wrap:wrap;}
-  .contact-item{font-size:13px;color:var(--muted);}
-  .contact-item span{display:block;color:var(--text);margin-top:2px;}
-  #formNote{font-size:12px;color:var(--muted);margin-top:10px;display:none;}
-
   /* ===== Empty states ===== */
   .empty-state{
     border:1px dashed var(--line);border-radius:var(--radius);
@@ -255,7 +243,6 @@
     <button data-tab="blog">Blog</button>
     <button data-tab="reviews">Reviews</button>
     <button data-tab="resume">Resume</button>
-    <button data-tab="contact">Contact</button>
   </nav>
 </header>
 
@@ -384,8 +371,21 @@
       <button class="filter-pill" data-type="anime">Anime</button>
       <button class="filter-pill" data-type="book">Books</button>
     </div>
-    <div class="list-view" id="reviewList"></div>
-    <div class="empty-state" id="reviewsEmpty">
+    <div class="list-view" id="reviewList">
+      <div class="list-row book-row" data-type="book" data-search="deep and dark and dangerous mary downing hahn book review">
+        <img class="book-cover" id="ddd-cover" src="https://covers.openlibrary.org/b/isbn/9780547076454-L.jpg" alt="Deep and Dark and Dangerous book cover" data-fallback="https://covers.openlibrary.org/b/isbn/9780618665457-L.jpg">
+        <div>
+          <span class="type-tag mono">book</span>
+          <h3>Deep and Dark and Dangerous</h3>
+          <p style="color:var(--muted);font-size:12px;margin-top:-4px;margin-bottom:10px;">by Mary Downing Hahn</p>
+          <p><strong style="color:var(--text);">Summary:</strong> Thirteen-year-old Ali is looking forward to a quiet summer with her aunt and young cousin at the family's old lake house in Maine. But an unsettling local girl keeps inserting herself into their vacation, and Ali starts to sense there's something she's not being told about her own family's past at that lake.</p>
+          <p style="margin-top:10px;"><strong style="color:var(--text);">About the author:</strong> Mary Downing Hahn is an American author and former children's librarian best known for ghost stories written for young readers, including <em>Wait Till Helen Comes</em> and <em>Took</em>. Her books have won more than fifty state children's choice awards over her career.</p>
+          <p style="margin-top:10px;font-style:italic;">Full review coming soon.</p>
+        </div>
+        <div class="rating">3/5 ★</div>
+      </div>
+    </div>
+    <div class="empty-state" id="reviewsEmpty" style="display:none;">
       <p>No reviews posted yet — first one coming soon.</p>
     </div>
   </section>
@@ -408,31 +408,23 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="panel" id="contact">
-    <div class="section-head">
-      <h2>Contact</h2>
-      <p></p>
-    </div>
-    <!-- Using Formspree: replace YOUR_FORM_ID with your own form ID from formspree.io -->
-    <form class="contact" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" required>
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required>
-      <label for="message">Message</label>
-      <textarea id="message" name="message" rows="5" required></textarea>
-      <button type="submit">Send message</button>
-      <div id="formNote">Thanks — your message has been sent.</div>
-    </form>
-    <div class="contact-row">
-      <div class="contact-item">Prefer email?<span>you@example.com</span></div>
-    </div>
-  </section>
-
 </main>
 
 <script>
+  // ---- Book cover fallback (tries alternate edition, then hides gracefully) ----
+  const cover = document.getElementById('ddd-cover');
+  if(cover){
+    let triedFallback = false;
+    cover.addEventListener('error', ()=>{
+      if(!triedFallback && cover.dataset.fallback){
+        triedFallback = true;
+        cover.src = cover.dataset.fallback;
+      } else {
+        cover.style.display = 'none';
+      }
+    });
+  }
+
   // ---- Tab switching ----
   const tabButtons = document.querySelectorAll('nav.tabs button');
   const panels = document.querySelectorAll('.panel');
@@ -458,11 +450,6 @@
       });
     });
   });
-
-  function askAbout(title){
-    showTab('contact');
-    document.getElementById('message').value = "Hi — I'd love to hear more about \"" + title + "\".";
-  }
 
   // ---- Search across all tabs ----
   const searchInput = document.getElementById('searchInput');
@@ -504,32 +491,6 @@
 
   document.addEventListener('click', (e)=>{
     if(!e.target.closest('.search-wrap')) resultsBox.classList.remove('open');
-  });
-
-  // ---- Contact form (Formspree, AJAX so it doesn't leave the page) ----
-  const form = document.getElementById('contactForm');
-  const note = document.getElementById('formNote');
-  form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const data = new FormData(form);
-    try{
-      const res = await fetch(form.action, {
-        method:'POST',
-        body:data,
-        headers:{'Accept':'application/json'}
-      });
-      if(res.ok){
-        note.textContent = "Thanks — your message has been sent.";
-        note.style.display = 'block';
-        form.reset();
-      } else {
-        note.textContent = "Something went wrong — try again, or email me directly.";
-        note.style.display = 'block';
-      }
-    } catch(err){
-      note.textContent = "Set up your Formspree form ID in the HTML to enable this form.";
-      note.style.display = 'block';
-    }
   });
 </script>
 
